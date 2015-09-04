@@ -108,9 +108,6 @@ class User < ActiveRecord::Base
       # проверяем, что дата начала и дата окончания не попадают в рабочее время и выходные
       if s.hour.between?(10, 14) && e.hour.between?(10, 14) && ![0, 6].include?(s.wday) && ![0, 6].include?(e.wday)
 
-        p "Check start #{s}"
-        p "Check end   #{e}"
-
         busy_matches = 0
 
         unless busy.nil?
@@ -119,9 +116,6 @@ class User < ActiveRecord::Base
 
             busy_start = DateTime.parse(row['start']).in_time_zone(self.timezone)
             busy_end   = DateTime.parse(row['end']).in_time_zone(self.timezone) - 1.minute
-
-            p "Busy start #{busy_start}"
-            p "Busy end   #{busy_end}"
 
             # проверяем, что дата начала и дата окончания не попадают в "занятый" интервал
             if s.between?(busy_start, busy_end) || e.between?(busy_start, busy_end)

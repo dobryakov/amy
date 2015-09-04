@@ -14,14 +14,15 @@ namespace :amy do
     Mail.all.each{|letter|
 
       from = letter.from.first
-      subject = letter.subject
+      subject = letter.subject.gsub! 'Re: ', ''
+      attendees = letter.to.reject{|i| i == ENV['POP3_USER']}.map{|i| { 'email' => i } }
 
       user = User.where(:email => from).first
 
       unless user.nil?
         interval = user.get_free_interval
         unless interval.nil?
-          params = interval.merge({ summary: subject })
+          params = interval.merge({ summary: subject, attendees: attendees })
           #p params
           user.create_event(params)
         end
