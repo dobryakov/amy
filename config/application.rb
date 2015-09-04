@@ -25,5 +25,7 @@ module Amy
 
     config.web_console.whitelisted_ips = ENV['DEBUG_ALLOW_IP']
 
+    config.time_zone = 'UTC'
+
   end
 end

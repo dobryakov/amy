@@ -24,10 +24,16 @@ class User < ActiveRecord::Base
            token: access_token.credentials.token,
            password: Devise.friendly_token[0,20]
         )
+        user.update_timezone
     end
 
     user
 
+  end
+
+  # helper
+  def time_now
+    Time.now.in_time_zone(self.timezone)
   end
 
   def create_event(h = {})
@@ -37,10 +43,10 @@ class User < ActiveRecord::Base
       description: 'The description',
       location: 'Location',
       start: {
-        dateTime: Time.now.to_datetime.rfc3339
+        dateTime: self.time_now.to_datetime.rfc3339
       },
       end: {
-        dateTime: (Time.now + 1.hour).to_datetime.rfc3339
+        dateTime: (self.time_now + 1.hour).to_datetime.rfc3339
       }
     }.merge(h)
 
@@ -55,13 +61,28 @@ class User < ActiveRecord::Base
 
   end
 
+  def update_timezone
+
+    client = Google::APIClient.new
+    client.authorization.access_token = self.token
+    service = client.discovered_api('calendar', 'v3')
+
+    results = client.execute(:api_method => service.calendars.get, :parameters => {'calendarId' => self.email}, :headers => {'Content-Type' => 'application/json'})
+    z = results.data.timeZone
+
+    unless z.nil?
+      self.update!(:timezone => z)
+    end
+
+  end
+
   def get_busy
 
     client = Google::APIClient.new
     client.authorization.access_token = self.token
     service = client.discovered_api('calendar', 'v3')
 
-    data = { "timeMin" => Time.now.to_datetime.rfc3339, "timeMax" => (Time.now + 1.week).to_datetime.rfc3339, "items" => [ { "id" => self.email } ] }
+    data = { "timeMin" => self.time_now.to_datetime.rfc3339, "timeMax" => (self.time_now + 1.week).to_datetime.rfc3339, "items" => [ { "id" => self.email } ] }
     results = client.execute(:api_method => service.freebusy.query, :parameters => {'calendarId' => self.email}, :body => JSON.dump(data), :headers => {'Content-Type' => 'application/json'})
 
     results.data.calendars.as_json[self.email]['busy']
@@ -75,9 +96,9 @@ class User < ActiveRecord::Base
 
     unless busy.nil?
 
-      s = (Time.now + 1.hour).beginning_of_hour
+      s = (self.time_now + 1.hour).beginning_of_hour
 
-      while s < (Time.now + 1.week) do
+      while s < (self.time_now + 1.week) do
 
         e = s + 1.hour
 
