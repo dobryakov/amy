@@ -45,13 +45,71 @@ class User < ActiveRecord::Base
     }.merge(h)
 
     client = Google::APIClient.new
-    client.authorization.access_token = current_user.token
+    client.authorization.access_token = self.token
     service = client.discovered_api('calendar', 'v3')
 
     client.execute(:api_method => service.events.insert,
-                   :parameters => {'calendarId' => current_user.email, 'sendNotifications' => true},
+                   :parameters => {'calendarId' => self.email, 'sendNotifications' => true},
                    :body => JSON.dump(event),
                    :headers => {'Content-Type' => 'application/json'})
+
+  end
+
+  def get_busy
+
+    client = Google::APIClient.new
+    client.authorization.access_token = self.token
+    service = client.discovered_api('calendar', 'v3')
+
+    data = { "timeMin" => Time.now.to_datetime.rfc3339, "timeMax" => (Time.now + 1.week).to_datetime.rfc3339, "items" => [ { "id" => self.email } ] }
+    results = client.execute(:api_method => service.freebusy.query, :parameters => {'calendarId' => self.email}, :body => JSON.dump(data), :headers => {'Content-Type' => 'application/json'})
+
+    results.data.calendars.as_json[self.email]['busy']
+
+  end
+
+  def get_free_interval
+
+    busy = self.get_busy
+    interval = nil
+
+    unless busy.nil?
+
+      s = (Time.now + 1.hour).beginning_of_hour
+
+      while s < (Time.now + 1.week) do
+
+        e = s + 1.hour
+
+        busy.each{|row|
+
+          busy_start = Date.parse(row['start'])
+          busy_end   = Date.parse(row['end'])
+
+          # проверяем, что дата начала и дата окончания не попадают в "занятый" интервал
+          # а так же, что они не попадают в рабочее время и выходные
+          if !s.between?(busy_start, busy_end) && !e.between?(busy_start, busy_end) && s.hour.between?(10, 14) && e.hour.between?(10, 14) && ![0, 6].include?(s.wday) && ![0, 6].include?(e.wday)
+            interval = {
+              start: {
+                dateTime: s.to_datetime.rfc3339
+              },
+              end: {
+                dateTime: e.to_datetime.rfc3339
+              }
+            }
+            break
+          end
+        }
+
+        break unless interval.nil?
+
+        s = s + 1.hour
+
+      end
+
+    end
+
+    interval
 
   end
 
