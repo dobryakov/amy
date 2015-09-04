@@ -60,4 +60,4 @@ end
 gem 'validate_url'
 gem 'dotenv-rails'
 
-
+gem 'devise'
