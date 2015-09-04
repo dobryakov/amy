@@ -7,7 +7,11 @@
 
   <% if user_signed_in? %>
 
-      <h2>Calendars</h2>
+      <h2>That's all!</h2>
+
+      <p>
+        Now you can add "amy@sendonfly.com" in the e-mail CC field, and I make an appointment for your partners in your google calendar.
+      </p>
 
       <p>
         <%= link_to 'Logout', destroy_user_session_path, :method => "DELETE", :class => 'btn btn-default' %>

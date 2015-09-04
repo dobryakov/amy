@@ -62,4 +62,11 @@ gem 'dotenv-rails'
 
 gem 'devise'
 
-gem "omniauth-google-oauth2" # https://github.com/zquestz/omniauth-google-oauth2
+# https://github.com/zquestz/omniauth-google-oauth2
+gem "omniauth-google-oauth2"
+
+# http://landonmarder.com/posts/2014/06/04/google-cal-rails/
+# https://developers.google.com/google-apps/calendar/quickstart/ruby
+gem 'google-api-client'
+
+gem 'chronic'
