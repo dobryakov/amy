@@ -12,6 +12,7 @@ class User < ActiveRecord::Base
 
     data = access_token.info
     logger.debug data
+    logger.debug access_token.credentials
 
     user = User.where(:email => data["email"]).first
 
@@ -22,6 +23,7 @@ class User < ActiveRecord::Base
            provider: access_token.provider,
            uid: access_token.uid,
            token: access_token.credentials.token,
+           refresh_token: access_token.credentials.refresh_token,
            password: Devise.friendly_token[0,20]
         )
         user.update_timezone

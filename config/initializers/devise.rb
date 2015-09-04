@@ -262,6 +262,7 @@ Devise.setup do |config|
     :additional_parameters => {"access_type" => "offline"},
     :access_type => "offline",
     :approval_prompt => "",
+    :prompt => 'consent',
     :scope => "email, profile, https://www.googleapis.com/auth/calendar",
   }
 

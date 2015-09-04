@@ -241,6 +241,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   le
+  mail
   omniauth-google-oauth2
   pg
   rails (= 4.2.1)

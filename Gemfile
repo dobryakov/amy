@@ -70,3 +70,6 @@ gem "omniauth-google-oauth2"
 gem 'google-api-client'
 
 gem 'chronic'
+
+# https://github.com/mikel/mail
+gem 'mail'
