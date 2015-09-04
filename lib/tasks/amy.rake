@@ -21,9 +21,9 @@ namespace :amy do
       unless user.nil?
         interval = user.get_free_interval
         unless interval.nil?
-          user.create_event(interval.merge({
-                                             summary: subject
-                                           }))
+          params = interval.merge({ summary: subject })
+          #p params
+          user.create_event(params)
         end
       end
 
