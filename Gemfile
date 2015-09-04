@@ -61,3 +61,5 @@ gem 'validate_url'
 gem 'dotenv-rails'
 
 gem 'devise'
+
+gem "omniauth-google-oauth2" # https://github.com/zquestz/omniauth-google-oauth2

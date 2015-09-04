@@ -1,0 +1,24 @@
+<div class="container">
+
+  <% unless notice.nil? %><div class="alert alert-success" role="alert"><p><%= notice %></p></div><% end %>
+  <% unless alert.nil? %><div class="alert alert-danger" role="alert"><p><%= alert %></p></div><% end %>
+
+  <h1>Project Amy</h1>
+
+  <% if user_signed_in? %>
+
+      <h2>Calendars</h2>
+
+      <p>
+        <%= link_to 'Logout', destroy_user_session_path, :method => "DELETE", :class => 'btn btn-default' %>
+      </p>
+
+  <% else %>
+
+      <p>
+        <%= link_to "Sign in with Google", user_omniauth_authorize_path(:google_oauth2), :class => 'btn btn-default' %>
+      </p>
+
+  <% end %>
+
+</div>
