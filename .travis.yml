@@ -1,0 +1,19 @@
+rvm:
+- 2.2
+
+script:
+- RAILS_ENV=test bundle exec rake db:migrate --trace
+- bundle exec rake db:test:prepare
+- bundle exec rake
+
+deploy:
+  provider: heroku
+  api_key:
+    secure: Oot9kpm5eDxT4GBoMVptseo4UMkIgnUCv5jyAomoGMgtPLiEhCuXEi4Z62Z1xqIb2cyr3IykCT97m7rZjQUVUVCmPyxiLnLb1QUB4jVOtKIqel2AoEeC6pOxkDIWTzf8K4PiFFcs6+K3aJAE/5dMxnT4FNQ8hLNHxakMmFIe1phUodQPUIHSBKxYxcmL7b3Kl8VRg9xWOaoEnKDj6ZPKmz8CYrZYwyH4E4+TjVQRJn4Jb6Xq1ST5HTJlFm+a+w2OtQ/i0UQk9apRx62sSV7Yzn9m43LvgPh7lG7InqCaGZ6ns+/JvZZ31QiYrRxn8YD1gsxh5pG4dMkV+I8khvdmC3O40m67QHjTgMymsZ1NnzjVduyQeIj50Sg93GpDOF2nx2G8rJoCuvcv9q679mbEq9NWulmn+2332oYDJu+sht3dgU25vzBY+low4nejV2f2rHs5aR7tXFvrLKvkHxN44l2WQrb9LFPnO6L0ROhISUg8uh2xAgtmagJVQNHa/CXqMaCxWiCejvdbjoTCJx2vjKQoAhQx9v4XB0+UpGB2Jll1WbzcXWz0okKfzy+6NL+kDMesa5cPQC34dAEh7DTCp0WfPdCis1cMYyiC19EpgmoG/XXOqWuQ+KXq5Xrg2pPFOXr5jS1Ne5JhCiLltFMhyTrcWE1GC9U1C1r6M1HGRis=
+  app: 'infinite-gorge-2302'
+  on:
+    repo: dobryakov/amy
+    branch: master
+  run:
+    - "rake db:migrate"
+  strategy: git
