@@ -106,7 +106,7 @@ class User < ActiveRecord::Base
       e = s + 1.hour
 
       # проверяем, что дата начала и дата окончания не попадают в рабочее время и выходные
-      if s.hour.between?(10, 14) && e.hour.between?(10, 14) && ![0, 6].include?(s.wday) && ![0, 6].include?(e.wday)
+      if s.hour.between?(10, 18) && e.hour.between?(10, 18) && ![0, 6].include?(s.wday) && ![0, 6].include?(e.wday)
 
         busy_matches = 0
 
