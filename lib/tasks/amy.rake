@@ -11,24 +11,29 @@ namespace :amy do
                        :enable_ssl => true
     end
 
-    Mail.all.each{|letter|
+    Mail.find_and_delete(:what => :first, :count => 10, :find_and_delete => true, :order => :asc) do |letter|
 
       from = letter.from.first
-      subject = letter.subject.gsub! 'Re: ', ''
-      attendees = letter.to.reject{|i| i == ENV['POP3_USER']}.map{|i| { 'email' => i } }
-
       user = User.where(:email => from).first
 
       unless user.nil?
+
+        subject = letter.subject.gsub! /Re: /, ''
+        attendees = letter.to.reject{|i| i == ENV['POP3_USER']}.push(from).map{|i| { 'email' => i } }
+
+        Rails.logger.debug attendees
+
         interval = user.get_free_interval
+
         unless interval.nil?
           params = interval.merge({ summary: subject, attendees: attendees })
           #p params
           user.create_event(params)
         end
+
       end
 
-    }
+    end
 
   end
 

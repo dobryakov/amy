@@ -45,8 +45,8 @@ class User < ActiveRecord::Base
 
     event = {
       summary: 'New Event Title',
-      description: 'The description',
-      location: 'Location',
+      description: '',
+      location: '',
       start: {
         dateTime: self.time_now.to_datetime.rfc3339
       },
