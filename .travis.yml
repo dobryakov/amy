@@ -16,4 +16,5 @@ deploy:
     branch: master
   run:
     - "rake db:migrate"
+    - "rake assets:precompile"
   strategy: git
