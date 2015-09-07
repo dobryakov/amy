@@ -73,3 +73,5 @@ gem 'chronic'
 
 # https://github.com/mikel/mail
 gem 'mail'
+
+gem 'puma'
