@@ -3,14 +3,28 @@
   <% unless notice.nil? %><div class="alert alert-success" role="alert"><p><%= notice %></p></div><% end %>
   <% unless alert.nil? %><div class="alert alert-danger" role="alert"><p><%= alert %></p></div><% end %>
 
-  <h1>Project Amy</h1>
+  <div class="page-header">
+    <h1>Project Amy</h1>
+  </div>
 
   <% if user_signed_in? %>
+
+      <p class="lead">
+        Just add "amy@sendonfly.com" to the e-mail "To" field, and Amy makes an event for your partners in your google calendar.
+      </p>
+
+      <h2>Example:</h2>
+
+      <p><%= image_tag('how-1.png', :class => "how_image") %></p>
+
+      <h2>Result:</h2>
+
+      <p><%= image_tag('how-2.png', :class => "how_image") %></p>
 
       <h2>That's all!</h2>
 
       <p>
-        Now you can add "amy@sendonfly.com" in the e-mail CC field, and I make an appointment for your partners in your google calendar.
+        You always can withdraw permissions from Amy at <a href="https://security.google.com/settings/security/permissions" target="_blank">this page</a>.
       </p>
 
       <p>
@@ -19,8 +33,14 @@
 
   <% else %>
 
+      <p><%= image_tag('secretary2', :class => "home_image") %></p>
+
+      <p class="lead">
+        Your personal secretary creates appointments just from e-mail.
+      </p>
+
       <p>
-        <%= link_to "Sign in with Google", user_omniauth_authorize_path(:google_oauth2), :class => 'btn btn-default' %>
+        <%= link_to "Sign in with Google", user_omniauth_authorize_path(:google_oauth2), :class => 'btn btn-success' %>
       </p>
 
   <% end %>
