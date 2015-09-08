@@ -19,6 +19,8 @@ namespace :amy do
       unless user.nil?
 
         subject = letter.subject.gsub! /Re: /, ''
+        subject = 'New event from amy' if subject.to_s == ''
+
         attendees = letter.to.reject{|i| i == ENV['POP3_USER']}.push(from).map{|i| { 'email' => i } }
 
         Rails.logger.debug attendees
