@@ -94,9 +94,9 @@ class User < ActiveRecord::Base
 
   end
 
-  def get_free_interval
+  def get_free_interval(busy = [])
 
-    busy = self.get_busy
+    #busy = self.get_busy
     interval = nil
 
     s = (self.time_now + 1.hour).beginning_of_hour

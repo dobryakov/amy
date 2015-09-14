@@ -13,6 +13,8 @@ namespace :amy do
 
     Mail.find_and_delete(:what => :first, :count => 10, :find_and_delete => true, :order => :asc) do |letter|
 
+      Rails.logger.debug letter.as_json
+
       from = letter.from.first
       user = User.where(:email => from).first
 
@@ -25,12 +27,22 @@ namespace :amy do
 
         Rails.logger.debug attendees
 
-        interval = user.get_free_interval
+        # собираем общее свободное время
+        busy = []
+        letter.to.reject{|i| i == ENV['POP3_USER']}.push(from).each{|e|
+          u = User.where(:email => e).last
+          busy = busy + u.get_busy unless u.nil?
+        }
+
+        Rails.logger.debug busy
+
+        interval = user.get_free_interval(busy)
 
         unless interval.nil?
           params = interval.merge({ summary: subject, attendees: attendees })
           #p params
           user.create_event(params)
+          Rails.logger.debug params.as_json
         end
 
       end
