@@ -4,10 +4,19 @@
   <% unless alert.nil? %><div class="alert alert-danger" role="alert"><p><%= alert %></p></div><% end %>
 
   <div class="page-header">
-    <h1>Project Amy</h1>
+    <h1>
+      <% if user_signed_in? && !current_user.image_url.nil? %>
+      <%= image_tag(current_user.image_url, :class => 'avatar') %>
+      <% end %>
+      Project Amy
+    </h1>
   </div>
 
   <% if user_signed_in? %>
+
+      <p>
+        Successfully logged as <%=h current_user.email %>
+      </p>
 
       <p class="lead">
         Just add &laquo;amy@sendonfly.com&raquo; to your reply:

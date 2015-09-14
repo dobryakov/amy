@@ -27,7 +27,8 @@ class User < ActiveRecord::Base
            token: access_token.credentials.token,
            refresh_token: access_token.credentials.refresh_token,
            token_expires_at: Time.at(access_token.credentials.expires_at).to_datetime,
-           password: Devise.friendly_token[0,20]
+           password: Devise.friendly_token[0,20],
+           image_url: access_token.info.image
         )
         user.update_timezone
     end
